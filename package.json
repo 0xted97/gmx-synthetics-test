@@ -1,0 +1,13 @@
+{
+  "name": "hardhat-project",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "dotenv": "^16.3.1",
+    "eth-create2-calculator": "^1.1.5",
+    "hardhat": "^2.19.3"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "4.9.3",
+    "prb-math": "^2.4.3"
+  }
+}
