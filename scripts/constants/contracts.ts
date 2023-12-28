@@ -51,3 +51,8 @@ export const getContractTokenErc20 = async (address: string) => {
     const contract = await ethers.getContractAt("TokenERC20", address);
     return contract;
 }
+
+export const getContractDepositHandler = async (network: string) => {
+    const contract = await ethers.getContractAt("DepositHandler", addresses[network].DepositHandler);
+    return contract;
+}

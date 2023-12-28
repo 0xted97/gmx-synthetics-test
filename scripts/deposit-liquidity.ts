@@ -63,7 +63,7 @@ async function main() {
   const multicallArgs = [
     exchangeRouter.interface.encodeFunctionData("sendWnt", [addresses[networkName].DepositVault, executionFee]),
     exchangeRouter.interface.encodeFunctionData("sendTokens", [usdc.target, addresses[networkName].DepositVault, shortTokenAmount]),
-    // exchangeRouter.interface.encodeFunctionData("createDeposit", [params]),
+    exchangeRouter.interface.encodeFunctionData("createDeposit", [params]),
   ];
   console.log("🚀 ~ file: deposit-liquidity.ts:55 ~ main ~ multicallArgs:", multicallArgs)
 

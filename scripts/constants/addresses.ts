@@ -7,6 +7,9 @@ export const addresses: { [chain: string]: Record<string, string> } = {
         ExchangeRouter: "0x730eA9B045cf932490516c333891eC5c5Bf171EB",
         Router: "0xbF5DF7b2096AA7B2aDF0961D10ee9A943A42a125",
 
+        // Handler
+        DepositHandler: "0xD9726dC22eA95c7e43E455A0f99E87e931760495",
+
         // Vault
         DepositVault: "0x706c58e1eFc47D1aA4cf1601eCA25eb897f9d9dE",
 
