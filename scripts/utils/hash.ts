@@ -1,14 +1,14 @@
-import { AbiCoder, keccak256, hexlify, toUtf8Bytes, toBeArray } from "ethers";
-const defaultAbiCoder = new AbiCoder();
+import { AbiCoder, keccak256, toBeHex, getBytes } from "ethers";
+const defaultAbiCoder = AbiCoder.defaultAbiCoder();
 
 export function encodeData(types: string[], values: any[]) {
   const bytes = defaultAbiCoder.encode(types, values);
-  return hexlify(bytes);
+  return toBeHex(bytes);
 }
 
 export function hashData(types: string[], values: any[]) {
   const bytes = defaultAbiCoder.encode(types, values);
-  const hash = keccak256(toBeArray(bytes));
+  const hash = keccak256(getBytes(bytes));
 
   return hash;
 }
@@ -18,5 +18,5 @@ export function hashString(value: string) {
 }
 
 export function keccakString(value: string) {
-  return keccak256(toUtf8Bytes(value));
+  return keccak256(getBytes(value));
 }

@@ -2,43 +2,48 @@ import { ethers } from "hardhat";
 import { addresses } from "./addresses";
 import { tokens } from "./tokens";
 
-export const getContractMarketFactory = async () => {
-    const contract = await ethers.getContractAt("MarketFactory", addresses.MarketFactory);
+export const getContractMarketFactory = async (network: string) => {
+    const contract = await ethers.getContractAt("MarketFactory", addresses[network].MarketFactory);
     return contract;
 }
 
-export const getContractMarketStore = async () => {
-    const contract = await ethers.getContractAt("MarketStoreUtils", addresses.MarketStoreUtils);
+export const getContractMarketStore = async (network: string) => {
+    const contract = await ethers.getContractAt("MarketStoreUtils", addresses[network].MarketStoreUtils);
     return contract;
 }
 
-export const getContractDataStore = async () => {
-    const contract = await ethers.getContractAt("DataStore", addresses.DataStore);
+export const getContractDataStore = async (network: string) => {
+    const contract = await ethers.getContractAt("DataStore", addresses[network].DataStore);
     return contract;
 }
 
-export const getContractRoleStore = async () => {
-    const contract = await ethers.getContractAt("RoleStore", addresses.RoleStore);
+export const getContractRoleStore = async (network: string) => {
+    const contract = await ethers.getContractAt("RoleStore", addresses[network].RoleStore);
     return contract;
 }
 
-export const getWOKB9 = async () => {
-    const contract = await ethers.getContractAt("WNT", tokens.WOKB9.address);
+export const getWOKB9 = async (network: string) => {
+    const contract = await ethers.getContractAt("WNT", tokens[network].WOKB9.address);
     return contract;
 }
 
-export const getContractReader = async () => {
-    const contract = await ethers.getContractAt("Reader", addresses.Reader);
+export const getContractReader = async (network: string) => {
+    const contract = await ethers.getContractAt("Reader", addresses[network].Reader);
     return contract;
 }
 
-export const getContractExchangeRouter = async () => {
-    const contract = await ethers.getContractAt("ExchangeRouter", addresses.ExchangeRouter);
+export const getContractExchangeRouter = async (network: string) => {
+    const contract = await ethers.getContractAt("ExchangeRouter", addresses[network].ExchangeRouter);
     return contract;
 }
 
-export const getContractMultiCall = async () => {
-    const contract = await ethers.getContractAt("Multicall3", addresses.MultiCall);
+export const getContractRouter = async (network: string) => {
+    const contract = await ethers.getContractAt("Router", addresses[network].Router);
+    return contract;
+}
+
+export const getContractMultiCall = async (network: string) => {
+    const contract = await ethers.getContractAt("Multicall3", addresses[network].MultiCall);
     return contract;
 }
 

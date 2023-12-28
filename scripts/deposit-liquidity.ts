@@ -1,21 +1,24 @@
-import { ethers } from "hardhat";
-import { getContractExchangeRouter, getContractMultiCall, getContractReader, getContractTokenErc20, getWOKB9 } from "./constants/contracts";
+import { ethers, network } from "hardhat";
+import { getContractExchangeRouter, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "./constants/contracts";
 import { addresses } from "./constants/addresses";
 import { DepositUtils } from "../typechain-types/contracts/exchange/DepositHandler";
 import { approveToken } from "./utils/approve";
+import { MyTokenUSDCMarketToken } from "./constants/markets";
 
 async function main() {
+  const networkName = network.name;
   const [wallet] = await ethers.getSigners();
+  const marketMtUsdc = MyTokenUSDCMarketToken;
 
-  const exchangeRouter = await getContractExchangeRouter();
-  const reader = await getContractReader();
+  const exchangeRouter = await getContractExchangeRouter(networkName);
+  const exchangeAddress = await exchangeRouter.getAddress();
 
-  const marketMtUsdc = "0x2591EE1fEFb78C85b71B33210b3AcF15250A10A2";
-  const market = await reader.getMarket(addresses.DataStore, marketMtUsdc);
-  console.log("🚀 ~ file: deposit-liquidity.ts:15 ~ main ~ market:", market)
+  const reader = await getContractReader(networkName);
+  const router = await getContractRouter(networkName);
+  const market = await reader.getMarket(addresses[networkName].DataStore, marketMtUsdc.marketToken);
 
 
-  const executionFee = ethers.parseEther("0.0001");
+  const executionFee = ethers.parseEther("0.01");
   const longTokenAmount = ethers.parseUnits("1", 18);
   const shortTokenAmount = ethers.parseUnits("1", 18); // 1 USDC
 
@@ -26,24 +29,25 @@ async function main() {
   // Transfer MyToken as long amount
   const myToken = await getContractTokenErc20(market[1]);
   const usdc = await getContractTokenErc20(market[2]);
-  const wnt = await getWOKB9(); // wrap okb
+  const wnt = await getWOKB9(networkName); // wrap okb
 
   // await wnt.deposit({ value: ethers.parseEther("1") });
-  console.log("MyToken balance %s", await myToken.balanceOf(wallet.address));
-  console.log("USDC balance %s", await usdc.balanceOf(wallet.address));
+  console.log("MyToken balance %s %s", await myToken.decimals(), await myToken.balanceOf(wallet.address));
+  console.log("USDC balance %s %s", await usdc.decimals(), await usdc.balanceOf(wallet.address));
   console.log("WNT balance %s", await wnt.balanceOf(wallet.address));
+  console.log("Exchange router WNT balance %s", await wnt.balanceOf(exchangeAddress));
 
 
-  const exchangeAddress = await exchangeRouter.getAddress();
-  await approveToken(wnt, wallet, addresses.Router);
-  await approveToken(myToken, wallet, addresses.Router);
-  await approveToken(usdc, wallet, addresses.Router);
+  await approveToken(wnt, wallet, exchangeAddress);
+  await approveToken(wnt, wallet, router.target.toString());
+  await approveToken(myToken, wallet, router.target.toString());
+  await approveToken(usdc, wallet, router.target.toString());
 
 
   const params: DepositUtils.CreateDepositParamsStruct = {
     receiver: wallet.address,
     callbackContract: ethers.ZeroAddress,
-    market: marketMtUsdc,
+    market: marketMtUsdc.marketToken,
     minMarketTokens: 0,
     shouldUnwrapNativeToken: false,
     executionFee: executionFee,
@@ -57,15 +61,15 @@ async function main() {
 
 
   const multicallArgs = [
-    exchangeRouter.interface.encodeFunctionData("sendWnt", [addresses.DepositVault, executionFee]),
-    exchangeRouter.interface.encodeFunctionData("sendTokens", [myToken.target, addresses.DepositVault, longTokenAmount]),
-    exchangeRouter.interface.encodeFunctionData("sendTokens", [usdc.target, addresses.DepositVault, shortTokenAmount]),
-    exchangeRouter.interface.encodeFunctionData("createDeposit", [params]),
+    exchangeRouter.interface.encodeFunctionData("sendWnt", [addresses[networkName].DepositVault, executionFee]),
+    exchangeRouter.interface.encodeFunctionData("sendTokens", [usdc.target, addresses[networkName].DepositVault, shortTokenAmount]),
+    // exchangeRouter.interface.encodeFunctionData("createDeposit", [params]),
   ];
   console.log("🚀 ~ file: deposit-liquidity.ts:55 ~ main ~ multicallArgs:", multicallArgs)
 
   const result = await exchangeRouter.multicall(multicallArgs, {
-    value: executionFee
+    value: executionFee,
+    // gasLimit: 5_000_000
   });
   console.log("🚀 ~ file: deposit-liquidity.ts:48 ~ main ~ result:", result)
 }
