@@ -1,6 +1,7 @@
 import { ethers, network } from "hardhat";
-import { getContractDepositVault, getContractExchangeRouter, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "./constants/contracts";
+import { getContractDataStore, getContractDepositVault, getContractExchangeRouter, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "./constants/contracts";
 import { addresses } from "./constants/addresses";
+import * as keys from "./utils/keys";
 import { DepositUtils } from "../typechain-types/contracts/exchange/DepositHandler";
 import { approveToken } from "./utils/approve";
 import { MyTokenUSDCMarketToken } from "./constants/markets";
@@ -17,15 +18,16 @@ async function main() {
   const exchangeAddress = await exchangeRouter.getAddress();
 
   const reader = await getContractReader(networkName);
+  const dataStore = await getContractDataStore(networkName);
   const router = await getContractRouter(networkName);
   const depositVault = await getContractDepositVault(networkName);
   const market = await reader.getMarket(addresses[networkName].DataStore, marketMtUsdc.marketToken);
   console.log("🚀 ~ file: deposit-liquidity.ts:23 ~ main ~ market:", market)
 
 
-  const executionFee = ethers.parseEther("0.01");
-  const longTokenAmount = ethers.parseUnits("2.5", 18); // 2.5 My Token
-  const shortTokenAmount = ethers.parseUnits("1", 18); // 1 USDC
+  const executionFee = ethers.parseEther("1");
+  const longTokenAmount = ethers.parseUnits("2500", 18); // 2.5 My Token
+  const shortTokenAmount = ethers.parseUnits("1000", 18); // 1 USDC
 
   const totalLongTokenAmount = longTokenAmount + executionFee;
 
@@ -64,6 +66,9 @@ async function main() {
     uiFeeReceiver: ethers.ZeroAddress,
   };
 
+  // Get nonce
+  const nonce = await dataStore.getUint(keys.NONCE);
+  console.log("🚀 ~ file: deposit-liquidity.ts:71 ~ main ~ nonce:", nonce)
   // Check record transfer
   const initialLongTokenAmount = await depositVault.tokenBalances(params.initialLongToken);
   console.log("🚀 ~ file: deposit-liquidity.ts:68 ~ main ~ initialLongTokenAmount:", initialLongTokenAmount)

@@ -11,6 +11,7 @@ async function main() {
   // MarketFactory.createMarket()
   const MyToken = tokens[networkName].MyToken;
   const USDC = tokens[networkName].USDC;
+  const WNT = tokens[networkName].WOKB9;
 
   const indexToken = MyToken.address;
   const longToken = MyToken.address;
@@ -22,8 +23,8 @@ async function main() {
   const eventEmitterAddress = await marketFactory.eventEmitter();
   const reader = await getContractReader(networkName);
 
-  const createMarketTx = await marketFactory.createMarket(MyToken.address, MyToken.address, USDC.address, DEFAULT_MARKET_TYPE);
-  await createMarketTx.wait();
+  // const createMarketTx = await marketFactory.createMarket(indexToken, longToken, shortToken, DEFAULT_MARKET_TYPE);
+  // await createMarketTx.wait();
 
   const marketTokenAddress = getMarketTokenAddress(indexToken, longToken, shortToken, DEFAULT_MARKET_TYPE, marketFactory.target.toString(), roleStoreAddress, dataStoreAddress);
   console.log("🚀 ~ file: create-market.ts:17 ~ main ~ marketTokenAddress:", marketTokenAddress)

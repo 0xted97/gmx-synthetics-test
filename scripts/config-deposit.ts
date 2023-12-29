@@ -23,6 +23,8 @@ async function main() {
   const holderAddress = await dataStore.getFunction("getAddress")(keys.HOLDING_ADDRESS);
   const wntTokenAddress = await dataStore.getFunction("getAddress")(keys.WNT);
   const gasLimitToken = await dataStore.getUint(keys.tokenTransferGasLimit(wntTokenAddress));
+  const gasLimitCallback = await dataStore.getUint(keys.MAX_CALLBACK_GAS_LIMIT);
+  console.log("🚀 ~ file: config-deposit.ts:27 ~ main ~ gasLimitCallback:", gasLimitCallback)
   console.log("🚀 ~ file: data-store.ts:13 ~ main ~ wntTokenAddress:", wntTokenAddress)
   console.log("🚀 ~ file: data-store.ts:10 ~ main ~ holderAddress:", holderAddress)
   console.log("🚀 ~ file: data-store.ts:16 ~ main ~ gasLimitToken:", gasLimitToken)
@@ -49,8 +51,7 @@ async function main() {
   console.log("🚀 ~ file: config-deposit.ts:46 ~ main ~ gasSingleSwap:", gasSingleSwap)
 
 
-  const gasLimitCallback = await dataStore.getUint(keys.MAX_CALLBACK_GAS_LIMIT);
-  console.log("🚀 ~ file: config-deposit.ts:37 ~ main ~ gasLimitCallback:", gasLimitCallback)
+
 
   // Check feature deposit handler is available?
   const disableDepositFeatureKey = keys.createDepositFeatureDisabledKey(depositHandler.target);

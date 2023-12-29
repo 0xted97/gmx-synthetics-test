@@ -21,8 +21,16 @@ export const MyTokenUSDCMarketToken = {
     longToken: "0x5E0d99a5d77Faeb5D54E5E620A5001526FFc45a0",
     shortToken: "0xa8F7C998Ca1A9528E8f296306ebf4FD40eE14f99",
     type: DEFAULT_MARKET_TYPE,
-    
 }
+
+export const OkbUSDCMarketToken = {
+    marketToken: "0xba8D1abA0dA3B7aD514A7B7c44e39677eEF493bE",
+    indexToken: "0xa2aFfd8301BfB3c5b815829f2F509f053556D21B",
+    longToken: "0xa2aFfd8301BfB3c5b815829f2F509f053556D21B",
+    shortToken: "0xa8F7C998Ca1A9528E8f296306ebf4FD40eE14f99",
+    type: DEFAULT_MARKET_TYPE,
+}
+
 
 export const markets = [
     {

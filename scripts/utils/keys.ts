@@ -1,5 +1,6 @@
 import { hashString, hashData } from "./hash";
 
+export const REENTRANCY_GUARD_STATUS = hashString("REENTRANCY_GUARD_STATUS");
 export const WNT = hashString("WNT");
 export const NONCE = hashString("NONCE");
 

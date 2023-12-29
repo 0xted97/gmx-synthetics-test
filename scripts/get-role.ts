@@ -1,5 +1,5 @@
 import { ethers, network } from "hardhat";
-import { getContractMarketFactory, getContractRoleStore } from "./constants/contracts";
+import { getContractRoleStore } from "./constants/contracts";
 import * as roles from "./utils/roles";
 import { addresses } from "./constants/addresses";
 
@@ -12,6 +12,13 @@ async function main() {
   if (!isWalletController) {
     const grantTx = await roleStore.grantRole(wallet.address, roles.CONTROLLER);
     console.log("🚀 ~ file: get-role.ts:13 ~ main ~ grantTx:", grantTx.hash)
+  }
+
+  // Grant controller role for ExchangeRouter
+  const isExchangeController = await roleStore.hasRole(addresses[networkName].ExchangeRouter, roles.CONTROLLER);
+  console.log("🚀 ~ file: get-role.ts:19 ~ main ~ isExchangeController:", isExchangeController)
+  if (!isExchangeController) {
+    const grantTx = await roleStore.grantRole(addresses[networkName].ExchangeRouter, roles.CONTROLLER);
   }
 
   // Grant controller role for [string]Handler to call [string]Utils
