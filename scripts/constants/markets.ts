@@ -8,17 +8,18 @@ import { MarketToken__factory } from "../../typechain-types";
 
 export const DEFAULT_MARKET_TYPE = hashString("basic-v1");
 export const DefaultMarket = {
-    indexToken: "0xf47a68fA6f8B9d25A8A17823aBc7802E81AD472c",
-    longToken: "0xf47a68fA6f8B9d25A8A17823aBc7802E81AD472c",
-    shortToken: "0x059fF644Cfd298C82771d5cF9360FfdE0a81B9D5",
+    marketToken: "0xff405681d7B683429ddba7B59Eae670C4f3FBcca",
+    indexToken: "0x5E0d99a5d77Faeb5D54E5E620A5001526FFc45a0",
+    longToken: "0x5E0d99a5d77Faeb5D54E5E620A5001526FFc45a0",
+    shortToken: "0xa8F7C998Ca1A9528E8f296306ebf4FD40eE14f99",
     type: DEFAULT_MARKET_TYPE,
 }
 
 export const MyTokenUSDCMarketToken = {
-    marketToken: "0x71f2412B15dE21239453b9c599d5c1406c9d24dD",
-    indexToken: "0x3412f4f41614BBD34BdC3Be39cAc83f9CE72F0F7",
-    longToken: "0x3412f4f41614BBD34BdC3Be39cAc83f9CE72F0F7",
-    shortToken: "0xc03b237B9337099786a3D5404ED03328296ae8cE",
+    marketToken: "0xff405681d7B683429ddba7B59Eae670C4f3FBcca",
+    indexToken: "0x5E0d99a5d77Faeb5D54E5E620A5001526FFc45a0",
+    longToken: "0x5E0d99a5d77Faeb5D54E5E620A5001526FFc45a0",
+    shortToken: "0xa8F7C998Ca1A9528E8f296306ebf4FD40eE14f99",
     type: DEFAULT_MARKET_TYPE,
     
 }

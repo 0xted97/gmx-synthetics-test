@@ -20,32 +20,33 @@ async function main() {
   const router = await getContractRouter(networkName);
   const depositVault = await getContractDepositVault(networkName);
   const market = await reader.getMarket(addresses[networkName].DataStore, marketMtUsdc.marketToken);
+  console.log("🚀 ~ file: deposit-liquidity.ts:23 ~ main ~ market:", market)
 
 
   const executionFee = ethers.parseEther("0.01");
-  const longTokenAmount = ethers.parseUnits("2.5", 18);
+  const longTokenAmount = ethers.parseUnits("2.5", 18); // 2.5 My Token
   const shortTokenAmount = ethers.parseUnits("1", 18); // 1 USDC
 
   const totalLongTokenAmount = longTokenAmount + executionFee;
 
 
   // Transfer WNT as execution fee
-  // Transfer MyToken as long amount
-  const myToken = await getContractTokenErc20(market[1]);
-  const usdc = await getContractTokenErc20(market[2]);
+  // Transfer longToken as long amount
+  const longToken = await getContractTokenErc20(market[2]); // MyToken
+  const shortToken = await getContractTokenErc20(market[3]); // MyUSDC
   const wnt = await getWOKB9(networkName); // wrap okb
 
   // await wnt.deposit({ value: ethers.parseEther("1") });
-  console.log("MyToken balance %s %s", await myToken.decimals(), await myToken.balanceOf(wallet.address));
-  console.log("USDC balance %s %s", await usdc.decimals(), await usdc.balanceOf(wallet.address));
+  console.log("LongToken(%s) balance %s %s", await longToken.name(), await longToken.decimals(), await longToken.balanceOf(wallet.address));
+  console.log("ShortToken(%s) balance %s %s", await shortToken.name(), await shortToken.decimals(), await shortToken.balanceOf(wallet.address));
   console.log("WNT balance %s", await wnt.balanceOf(wallet.address));
   console.log("Exchange router WNT balance %s", await wnt.balanceOf(exchangeAddress));
 
 
   // await approveToken(wnt, wallet, exchangeAddress);
   await approveToken(wnt, wallet, router.target.toString());
-  await approveToken(myToken, wallet, router.target.toString());
-  await approveToken(usdc, wallet, router.target.toString());
+  await approveToken(longToken, wallet, router.target.toString());
+  await approveToken(shortToken, wallet, router.target.toString());
 
 
   const params: DepositUtils.CreateDepositParamsStruct = {
@@ -56,9 +57,9 @@ async function main() {
     shouldUnwrapNativeToken: false,
     executionFee: executionFee,
     callbackGasLimit: 0,
-    initialLongToken: myToken.target,
+    initialLongToken: longToken.target,
     longTokenSwapPath: [],
-    initialShortToken: usdc.target,
+    initialShortToken: shortToken.target,
     shortTokenSwapPath: [],
     uiFeeReceiver: ethers.ZeroAddress,
   };
@@ -75,8 +76,8 @@ async function main() {
 
   const multicallArgs = [
     exchangeRouter.interface.encodeFunctionData("sendWnt", [addresses[networkName].DepositVault, executionFee]),
-    exchangeRouter.interface.encodeFunctionData("sendTokens", [myToken.target, addresses[networkName].DepositVault, longTokenAmount]),
-    exchangeRouter.interface.encodeFunctionData("sendTokens", [usdc.target, addresses[networkName].DepositVault, shortTokenAmount]),
+    exchangeRouter.interface.encodeFunctionData("sendTokens", [longToken.target, addresses[networkName].DepositVault, longTokenAmount]),
+    exchangeRouter.interface.encodeFunctionData("sendTokens", [shortToken.target, addresses[networkName].DepositVault, shortTokenAmount]),
     exchangeRouter.interface.encodeFunctionData("createDeposit", [params]),
   ];
 
@@ -86,11 +87,11 @@ async function main() {
   });
   console.log("🚀 ~ file: deposit-liquidity.ts:86 ~ main ~ testCall:", testCall)
 
-  const result = await exchangeRouter.multicall(multicallArgs, {
-    value: executionFee,
-    // gasLimit: 8000000,
-  });
-  console.log("🚀 ~ file: deposit-liquidity.ts:91 ~ main ~ result:", result)
+  // const result = await exchangeRouter.multicall(multicallArgs, {
+  //   value: executionFee,
+  //   // gasLimit: 8000000,
+  // });
+  // console.log("🚀 ~ file: deposit-liquidity.ts:91 ~ main ~ result:", result)
 }
 
 // We recommend this pattern to be able to use async/await everywhere

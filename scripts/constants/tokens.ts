@@ -13,22 +13,13 @@ export const tokens: { [chain: string]: Token } = {
 
         // 
         USDC: {
-            address: "0xc03b237B9337099786a3D5404ED03328296ae8cE",
-            priceFeed: "0x900ba2567632D4DD7c191C3915517E28351BBe33"
+            address: "0xa8F7C998Ca1A9528E8f296306ebf4FD40eE14f99",
+            priceFeed: "0xCF5643eee5D8d49A672F63a2FC631C1C60AEFD35"
         },
         MyToken: {
-            address: "0x3412f4f41614BBD34BdC3Be39cAc83f9CE72F0F7",
-            priceFeed: "0x121246C5506dc010C9DAf81F7e9d0c2B85a57B45"
+            address: "0x5E0d99a5d77Faeb5D54E5E620A5001526FFc45a0",
+            priceFeed: "0x7D71d7fd2289295cd790195bcA531c58e4E76eE0"
         },
-
-        // USDC: {
-        //     address: "0x059fF644Cfd298C82771d5cF9360FfdE0a81B9D5",
-        //     priceFeed: ""
-        // },
-        // MyToken: {
-        //     address: "0xf47a68fA6f8B9d25A8A17823aBc7802E81AD472c",
-        // },
-
     },
     arbitrum: {
         WETH: {
