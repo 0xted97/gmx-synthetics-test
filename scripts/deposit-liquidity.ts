@@ -1,10 +1,13 @@
 import { ethers, network } from "hardhat";
-import { getContractExchangeRouter, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "./constants/contracts";
+import { getContractDepositVault, getContractExchangeRouter, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "./constants/contracts";
 import { addresses } from "./constants/addresses";
 import { DepositUtils } from "../typechain-types/contracts/exchange/DepositHandler";
 import { approveToken } from "./utils/approve";
 import { MyTokenUSDCMarketToken } from "./constants/markets";
 
+/**
+ * Deposit WNT + Stablecoin
+ */
 async function main() {
   const networkName = network.name;
   const [wallet] = await ethers.getSigners();
@@ -15,11 +18,12 @@ async function main() {
 
   const reader = await getContractReader(networkName);
   const router = await getContractRouter(networkName);
+  const depositVault = await getContractDepositVault(networkName);
   const market = await reader.getMarket(addresses[networkName].DataStore, marketMtUsdc.marketToken);
 
 
   const executionFee = ethers.parseEther("0.01");
-  const longTokenAmount = ethers.parseUnits("1", 18);
+  const longTokenAmount = ethers.parseUnits("2.5", 18);
   const shortTokenAmount = ethers.parseUnits("1", 18); // 1 USDC
 
   const totalLongTokenAmount = longTokenAmount + executionFee;
@@ -38,7 +42,7 @@ async function main() {
   console.log("Exchange router WNT balance %s", await wnt.balanceOf(exchangeAddress));
 
 
-  await approveToken(wnt, wallet, exchangeAddress);
+  // await approveToken(wnt, wallet, exchangeAddress);
   await approveToken(wnt, wallet, router.target.toString());
   await approveToken(myToken, wallet, router.target.toString());
   await approveToken(usdc, wallet, router.target.toString());
@@ -52,26 +56,41 @@ async function main() {
     shouldUnwrapNativeToken: false,
     executionFee: executionFee,
     callbackGasLimit: 0,
-    initialLongToken: wnt.target,
+    initialLongToken: myToken.target,
     longTokenSwapPath: [],
     initialShortToken: usdc.target,
     shortTokenSwapPath: [],
     uiFeeReceiver: ethers.ZeroAddress,
   };
 
+  // Check record transfer
+  const initialLongTokenAmount = await depositVault.tokenBalances(params.initialLongToken);
+  console.log("🚀 ~ file: deposit-liquidity.ts:68 ~ main ~ initialLongTokenAmount:", initialLongTokenAmount)
+  const initialShortTokenAmount = await depositVault.tokenBalances(params.initialShortToken);
+  console.log("🚀 ~ file: deposit-liquidity.ts:70 ~ main ~ initialShortTokenAmount:", initialShortTokenAmount)
+  // const syncBalanceLong = await depositVault.syncTokenBalance(params.initialLongToken);
+  // const syncBalanceShort = await depositVault.syncTokenBalance(params.initialShortToken);
+
+
 
   const multicallArgs = [
     exchangeRouter.interface.encodeFunctionData("sendWnt", [addresses[networkName].DepositVault, executionFee]),
+    exchangeRouter.interface.encodeFunctionData("sendTokens", [myToken.target, addresses[networkName].DepositVault, longTokenAmount]),
     exchangeRouter.interface.encodeFunctionData("sendTokens", [usdc.target, addresses[networkName].DepositVault, shortTokenAmount]),
     exchangeRouter.interface.encodeFunctionData("createDeposit", [params]),
   ];
-  console.log("🚀 ~ file: deposit-liquidity.ts:55 ~ main ~ multicallArgs:", multicallArgs)
+
+  const testCall = await exchangeRouter.multicall.staticCall(multicallArgs, {
+    value: executionFee,
+    gasLimit: 8000000
+  });
+  console.log("🚀 ~ file: deposit-liquidity.ts:86 ~ main ~ testCall:", testCall)
 
   const result = await exchangeRouter.multicall(multicallArgs, {
     value: executionFee,
-    // gasLimit: 5_000_000
+    // gasLimit: 8000000,
   });
-  console.log("🚀 ~ file: deposit-liquidity.ts:48 ~ main ~ result:", result)
+  console.log("🚀 ~ file: deposit-liquidity.ts:91 ~ main ~ result:", result)
 }
 
 // We recommend this pattern to be able to use async/await everywhere

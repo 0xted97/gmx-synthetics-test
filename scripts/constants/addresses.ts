@@ -3,12 +3,16 @@ export const addresses: { [chain: string]: Record<string, string> } = {
         DataStore: "0x43B6C36c60Be31719323B78E71ECe2eD526862F9",
         RoleStore: "0x13370bf1d1309292343ebdfe668c7165A9BB1D7A",
         MarketFactory: "0xfE50ABB5383402089B7de87eb361D60f90D43cdB",
-        MarketStoreUtils: "0xD9e9961d6Ae6C0CC712FAf61baB2caaF1f4834A9",
         ExchangeRouter: "0x730eA9B045cf932490516c333891eC5c5Bf171EB",
         Router: "0xbF5DF7b2096AA7B2aDF0961D10ee9A943A42a125",
-
+        
         // Handler
         DepositHandler: "0xD9726dC22eA95c7e43E455A0f99E87e931760495",
+        WithdrawalHandler:"0x16652b2B808cC0CA8dB72d3834D84b64CD4d9ee9",
+        
+        // Utils
+        MarketStoreUtils: "0xD9e9961d6Ae6C0CC712FAf61baB2caaF1f4834A9",
+        MarketUtils: "0xCbB59776C2936156ec168A4442bEbd153abBaBb8",
 
         // Vault
         DepositVault: "0x706c58e1eFc47D1aA4cf1601eCA25eb897f9d9dE",

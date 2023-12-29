@@ -8,8 +8,8 @@ export const tokens: { [chain: string]: Token } = {
     x1Testnet: {
         WOKB9: {
             address: "0xa2affd8301bfb3c5b815829f2f509f053556d21b",
+            priceFeed: "0xA4d4B50f8372e101ad34b9E6ceBD29E7A83C60Af",
         },
-
 
         // 
         USDC: {

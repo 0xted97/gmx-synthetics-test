@@ -1,6 +1,6 @@
 import { ethers, network } from "hardhat";
 import { getContractMarketFactory, getContractReader } from "./constants/contracts";
-import { DEFAULT_MARKET_TYPE, DefaultMarket, getMarketTokenAddress } from "./constants/markets";
+import { DEFAULT_MARKET_TYPE, getMarketTokenAddress } from "./constants/markets";
 import { addresses } from "./constants/addresses";
 import { tokens } from "./constants/tokens";
 

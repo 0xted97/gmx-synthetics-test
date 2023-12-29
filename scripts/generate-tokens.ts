@@ -19,21 +19,30 @@ async function main() {
         addresses[networkName].DataSource,
         "USDC", // Example price of ETH
     );
+
+    const okbPriceFeed = await PriceFeedToken.deploy(
+        addresses[networkName].OracleService,
+        addresses[networkName].DataSource,
+        "OKB", // Example price of ETH
+    );
     await Promise.all([
         myToken.waitForDeployment(),
         myTokenPriceFeed.waitForDeployment(),
         USDC.waitForDeployment(),
         usdcPriceFeed.waitForDeployment(),
+        okbPriceFeed.waitForDeployment(),
     ]);
 
     const usdcAddress = await USDC.getAddress();
     const tokenAddress = await myToken.getAddress();
     const tokenPriceFeedAddress = await myTokenPriceFeed.getAddress();
     const usdcPriceFeedAddress = await usdcPriceFeed.getAddress();
+    const okbPriceFeedAddress = await okbPriceFeed.getAddress();
     console.log("🚀 ~ USDC address is ", usdcAddress);
     console.log("🚀 ~ USDC price feed is ", usdcPriceFeedAddress);
     console.log("🚀 ~ MyToken address is ", tokenAddress);
     console.log("🚀 ~ MyToken price feed address is", tokenPriceFeedAddress);
+    console.log("🚀 ~ OKN price feed address is", okbPriceFeedAddress);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
