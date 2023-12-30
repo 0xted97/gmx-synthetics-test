@@ -3,18 +3,20 @@ export const addresses: { [chain: string]: Record<string, string> } = {
         DataStore: "0x43B6C36c60Be31719323B78E71ECe2eD526862F9",
         RoleStore: "0x13370bf1d1309292343ebdfe668c7165A9BB1D7A",
         MarketFactory: "0xfE50ABB5383402089B7de87eb361D60f90D43cdB",
-        ExchangeRouter: "0x730eA9B045cf932490516c333891eC5c5Bf171EB",
+        ExchangeRouter: "0xCf51052545BD70b650e5ae1cc4B40d2Ae21A3afc",
         Router: "0xbF5DF7b2096AA7B2aDF0961D10ee9A943A42a125",
         
         // Handler
-        DepositHandler: "0xD9726dC22eA95c7e43E455A0f99E87e931760495",
-        WithdrawalHandler:"0x16652b2B808cC0CA8dB72d3834D84b64CD4d9ee9",
+        OrderHandler: "0x45bab18BCcBf50e8b8C8e3b4737e96d3cd95d6e9",
+        DepositHandler: "0xfa86BE1d6493Dd607Dc9B01564C667c17c54E835",
+        WithdrawalHandler:"0x19feE34A9C77Fa3F0f701e692D052A2f3457Eb2e",
         
         // Utils
         MarketStoreUtils: "0xD9e9961d6Ae6C0CC712FAf61baB2caaF1f4834A9",
-        MarketUtils: "0xCbB59776C2936156ec168A4442bEbd153abBaBb8",
+        MarketUtils: "0x54e815D006A5e0Ed8E7dCe7a76F7AD16acD79162",
 
         // Vault
+        OrderVault: "0xd5C5E703167d4Cc444C4E6132aBC3BBB5f798b7D",
         DepositVault: "0x706c58e1eFc47D1aA4cf1601eCA25eb897f9d9dE",
 
         // MultiCall

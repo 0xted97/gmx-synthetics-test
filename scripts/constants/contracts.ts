@@ -61,3 +61,13 @@ export const getContractDepositVault = async (network: string) => {
     const contract = await ethers.getContractAt("DepositVault", addresses[network].DepositVault);
     return contract;
 }
+
+export const getContractOrderHandler = async (network: string) => {
+    const contract = await ethers.getContractAt("OrderHandler", addresses[network].OrderHandler);
+    return contract;
+}
+
+export const getContractChain = async (network: string) => {
+    const contract = await ethers.getContractAt("Chain", addresses[network].OrderHandler);
+    return contract;
+}

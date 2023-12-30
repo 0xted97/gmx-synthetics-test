@@ -34,6 +34,13 @@ async function main() {
 
   }
 
+  const isOrderHandlerController = await roleStore.hasRole(addresses[networkName].OrderHandler, roles.CONTROLLER);
+  console.log("🚀 ~ file: get-role.ts:38 ~ main ~ isOrderHandlerController:", isOrderHandlerController)
+  if (!isOrderHandlerController) {
+    const grantTx = await roleStore.grantRole(addresses[networkName].OrderHandler, roles.CONTROLLER);
+
+  }
+
 
 }
 

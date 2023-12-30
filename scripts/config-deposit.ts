@@ -54,7 +54,7 @@ async function main() {
 
 
   // Check feature deposit handler is available?
-  const disableDepositFeatureKey = keys.createDepositFeatureDisabledKey(depositHandler.target);
+  const disableDepositFeatureKey = keys.createDepositFeatureDisabledKey(depositHandler.target.toString());
   const disableDepositFeature = await dataStore.getBool(disableDepositFeatureKey);
   console.log("🚀 ~ file: config-deposit.ts:29 ~ main ~ disableDepositFeature:", disableDepositFeature)
   if (disableDepositFeature) {
