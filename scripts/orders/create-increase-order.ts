@@ -1,11 +1,11 @@
 import { ethers, network } from "hardhat";
-import { getContractDataStore, getContractDepositVault, getContractExchangeRouter, getContractOrderHandler, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "./constants/contracts";
-import { addresses } from "./constants/addresses";
-import * as keys from "./utils/keys";
-import { BaseOrderUtils } from "../typechain-types/contracts/exchange/OrderHandler";
-import { approveToken } from "./utils/approve";
-import { OkbUSDCMarketToken } from "./constants/markets";
-import { hashString } from "./utils";
+import { getContractDataStore, getContractDepositVault, getContractExchangeRouter, getContractOrderHandler, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "../constants/contracts";
+import { addresses } from "../constants/addresses";
+import * as keys from "../utils/keys";
+import { BaseOrderUtils } from "../../typechain-types/contracts/exchange/OrderHandler";
+import { approveToken } from "../utils/approve";
+import { OkbUSDCMarketToken } from "../constants/markets";
+import { hashString } from "../utils";
 
 /**
  * Increase position of WNT + Stablecoin
@@ -26,8 +26,8 @@ async function main() {
   console.log("🚀 ~ file: deposit-liquidity.ts:23 ~ main ~ market:", market)
 
 
-  const executionFee = ethers.parseEther("1");
-  const longTokenAmount = ethers.parseEther("0.01"); // 2.5 My Token
+  const executionFee = ethers.parseEther("0.5");
+  const longTokenAmount = ethers.parseEther("0.021"); // 2.5 My Token
   const shortTokenAmount = ethers.parseUnits("1000", 18); // 1 USDC
 
   const totalLongTokenAmount = longTokenAmount + executionFee;
@@ -99,11 +99,11 @@ async function main() {
   });
   console.log("🚀 ~ file: deposit-liquidity.ts:86 ~ main ~ testCall:", testCall)
 
-  // const result = await exchangeRouter.multicall(multicallArgs, {
-  //   value: executionFee,
-  //   // gasLimit: 8000000,
-  // });
-  // console.log("🚀 ~ file: deposit-liquidity.ts:91 ~ main ~ result:", result)
+  const result = await exchangeRouter.multicall(multicallArgs, {
+    value: executionFee,
+    gasLimit: 2_500_000,
+  });
+  console.log("🚀 ~ file: deposit-liquidity.ts:91 ~ main ~ result:", result)
 }
 
 // We recommend this pattern to be able to use async/await everywhere

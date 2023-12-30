@@ -1,10 +1,10 @@
 import { ethers, network } from "hardhat";
-import { getContractChain, getContractDataStore, getContractDepositHandler, getContractDepositVault, getContractExchangeRouter, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "./constants/contracts";
-import { addresses } from "./constants/addresses";
-import * as keys from "./utils/keys";
-import { DepositUtils } from "../typechain-types/contracts/exchange/DepositHandler";
-import { approveToken } from "./utils/approve";
-import { MyTokenUSDCMarketToken } from "./constants/markets";
+import { getContractChain, getContractDataStore, getContractDepositHandler, getContractDepositVault, getContractExchangeRouter, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "../constants/contracts";
+import { addresses } from "../constants/addresses";
+import * as keys from "../utils/keys";
+import { DepositUtils } from "../../typechain-types/contracts/exchange/DepositHandler";
+import { approveToken } from "../utils/approve";
+import { MyTokenUSDCMarketToken } from "../constants/markets";
 
 /**
  * Deposit WNT + Stablecoin
@@ -26,9 +26,9 @@ async function main() {
   console.log("🚀 ~ file: deposit-liquidity.ts:23 ~ main ~ market:", market)
 
 
-  const executionFee = ethers.parseEther("0.1");
-  const longTokenAmount = ethers.parseUnits("2500", 18); // 2.5 My Token
-  const shortTokenAmount = ethers.parseUnits("1000", 18); // 1 USDC
+  const executionFee = ethers.parseEther("0.51");
+  const longTokenAmount = ethers.parseUnits("2500.5", 18); // 2.5 My Token
+  const shortTokenAmount = ethers.parseUnits("1000.9", 18); // 1 USDC
 
   const totalLongTokenAmount = longTokenAmount + executionFee;
 
@@ -93,13 +93,13 @@ async function main() {
 
   const testCall = await exchangeRouter.multicall.staticCall(multicallArgs, {
     value: executionFee,
-    // gasLimit: 8000000
+    gasLimit: 2_500_000,
   });
   console.log("🚀 ~ file: deposit-liquidity.ts:86 ~ main ~ testCall:", testCall)
 
   const result = await exchangeRouter.multicall(multicallArgs, {
     value: executionFee,
-    // gasLimit: 8000000,
+    gasLimit: 2_500_000,
   });
   console.log("🚀 ~ file: deposit-liquidity.ts:91 ~ main ~ result:", result)
 }

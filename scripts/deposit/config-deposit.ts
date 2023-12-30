@@ -1,10 +1,10 @@
 import { ethers, network } from "hardhat";
-import { addresses } from "./constants/addresses";
-import { getContractDataStore, getContractDepositHandler, getContractDepositVault, getContractMarketStoreUtils } from "./constants/contracts";
-import * as keys from "./utils/keys";
-import { tokens } from "./constants/tokens";
-import { MyTokenUSDCMarketToken } from "./constants/markets";
-import { MarketStoreUtils__factory } from "../typechain-types";
+import { addresses } from "../constants/addresses";
+import { getContractDataStore, getContractDepositHandler, getContractDepositVault, getContractMarketStoreUtils } from "../constants/contracts";
+import * as keys from "../utils/keys";
+import { tokens } from "../constants/tokens";
+import { MyTokenUSDCMarketToken } from "../constants/markets";
+import { MarketStoreUtils__factory } from "../../typechain-types";
 
 async function main() {
   const [deployer, feeWallet] = await ethers.getSigners();
