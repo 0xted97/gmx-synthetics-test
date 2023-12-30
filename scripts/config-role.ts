@@ -5,7 +5,7 @@ import { addresses } from "./constants/addresses";
 
 async function main() {
   const networkName = network.name;
-  const [wallet] = await ethers.getSigners();
+  const [wallet, , keeper] = await ethers.getSigners();
   // Get role controller
   const roleStore = await getContractRoleStore(networkName);
   const isWalletController = await roleStore.hasRole(wallet.address, roles.CONTROLLER);
@@ -38,6 +38,13 @@ async function main() {
   console.log("🚀 ~ file: get-role.ts:38 ~ main ~ isOrderHandlerController:", isOrderHandlerController)
   if (!isOrderHandlerController) {
     const grantTx = await roleStore.grantRole(addresses[networkName].OrderHandler, roles.CONTROLLER);
+
+  }
+
+  const isOnlyKeeper = await roleStore.hasRole(keeper.address, roles.ORDER_KEEPER);
+  console.log("🚀 ~ file: config-role.ts:45 ~ main ~ isOnlyKeeper:", isOnlyKeeper)
+  if (!isOnlyKeeper) {
+    const grantTx = await roleStore.grantRole(keeper.address, roles.ORDER_KEEPER);
 
   }
 

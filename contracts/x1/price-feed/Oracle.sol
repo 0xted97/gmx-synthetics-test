@@ -1,5 +1,5 @@
 pragma solidity ^0.8.18;
-
+import "./../../oracle/IPriceFeed.sol";
 interface IExOraclePriceData
 {
     function latestRoundData(string calldata priceType, address dataSource) external view returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound);
@@ -7,16 +7,6 @@ interface IExOraclePriceData
     function getOffchain(string calldata priceType, address source) external view returns (uint256 price, uint256 timestamp);
     function getCumulativePrice(string calldata priceType, address source) external view returns (uint256 cumulativePrice,uint32 timestamp);
     function lastResponseTime(address source) external view returns (uint256);
-}
-
-interface IPriceFeed {
-    function latestRoundData() external view returns (
-        uint80 roundId,
-        int256 answer,
-        uint256 startedAt,
-        uint256 updatedAt,
-        uint80 answeredInRound
-    );
 }
 
 contract PriceFeedToken is IPriceFeed {   
