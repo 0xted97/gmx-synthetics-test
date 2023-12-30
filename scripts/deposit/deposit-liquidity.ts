@@ -26,9 +26,9 @@ async function main() {
   console.log("🚀 ~ file: deposit-liquidity.ts:23 ~ main ~ market:", market)
 
 
-  const executionFee = ethers.parseEther("0.51");
-  const longTokenAmount = ethers.parseUnits("2500.5", 18); // 2.5 My Token
-  const shortTokenAmount = ethers.parseUnits("1000.9", 18); // 1 USDC
+  const executionFee = ethers.parseEther("0.55");
+  const longTokenAmount = ethers.parseUnits("120.5", 18); // 2.5 My Token
+  const shortTokenAmount = ethers.parseUnits("222.9", 18); // 1 USDC
 
   const totalLongTokenAmount = longTokenAmount + executionFee;
 
