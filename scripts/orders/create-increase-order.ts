@@ -32,8 +32,8 @@ async function main() {
 
 
 
-  const executionFee = ethers.parseEther("0.001");
-  const longTokenAmount = ethers.parseUnits("1200", 18); // 2.5 My Token
+  const executionFee = ethers.parseEther("0.1");
+  const longTokenAmount = ethers.parseUnits("1.5", 18); // 2.5 My Token
   const shortTokenAmount = ethers.parseUnits("1000", 18); // 1 USDC
 
   const totalLongTokenAmount = longTokenAmount + executionFee;
@@ -69,9 +69,9 @@ async function main() {
       uiFeeReceiver:  ethers.ZeroAddress,
     },
     numbers: {
-      sizeDeltaUsd: ethers.parseUnits("20", 30),
-      triggerPrice: ethers.parseUnits("1", 6), // WETH oraclePrecision = 8
-      acceptablePrice: ethers.parseUnits("1", 30),
+      sizeDeltaUsd: ethers.parseUnits("20", 22),
+      triggerPrice: ethers.parseUnits("2300", 6), // WETH oraclePrecision = 6
+      acceptablePrice: ethers.parseUnits("2340", 22),
       executionFee,
       callbackGasLimit: 0,
       minOutputAmount: 0,
@@ -86,7 +86,6 @@ async function main() {
 
   // Get referral address
   const referral = await orderHandler.referralStorage();
-  console.log("🚀 ~ file: create-increase-order.ts:82 ~ main ~ referral:", referral)
 
   // Get nonce
   const nonce = await dataStore.getUint(keys.NONCE);
@@ -102,13 +101,13 @@ async function main() {
 
   const testCall = await exchangeRouter.multicall.staticCall(multicallArgs, {
     value: executionFee,
-    gasLimit: 8000000
+    gasLimit: 5_500_000,
   });
   console.log("🚀 ~ file: deposit-liquidity.ts:86 ~ main ~ testCall:", testCall)
 
   const result = await exchangeRouter.multicall(multicallArgs, {
     value: executionFee,
-    // gasLimit: 2_500_000,
+    gasLimit: 5_500_000,
   });
   console.log("🚀 ~ file: deposit-liquidity.ts:91 ~ main ~ result:", result)
 }
