@@ -1,11 +1,12 @@
 import { ethers, network } from "hardhat";
-import { getContractDataStore, getContractDepositVault, getContractExchangeRouter, getContractOrderHandler, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "../constants/contracts";
+import { getContractDataStore, getContractDepositVault, getContractExchangeRouter, getContractOrderHandler, getContractPriceFeedTokenErc20, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "../constants/contracts";
 import { addresses } from "../constants/addresses";
 import * as keys from "../utils/keys";
 import { BaseOrderUtils } from "../../typechain-types/contracts/exchange/OrderHandler";
 import { approveToken } from "../utils/approve";
-import { OkbUSDCMarketToken } from "../constants/markets";
+import { MyTokenUSDCMarketToken } from "../constants/markets";
 import { hashString } from "../utils";
+import { tokens } from "../constants/tokens";
 
 /**
  * Increase position of WNT + Stablecoin
@@ -13,7 +14,7 @@ import { hashString } from "../utils";
 async function main() {
   const networkName = network.name;
   const [wallet] = await ethers.getSigners();
-  const marketOkbUsdc = OkbUSDCMarketToken;
+  const marketOkbUsdc = MyTokenUSDCMarketToken;
 
   const exchangeRouter = await getContractExchangeRouter(networkName);
   const exchangeAddress = await exchangeRouter.getAddress();
@@ -24,10 +25,15 @@ async function main() {
   const orderHandler = await getContractOrderHandler(networkName);
   const market = await reader.getMarket(addresses[networkName].DataStore, marketOkbUsdc.marketToken);
   console.log("🚀 ~ file: deposit-liquidity.ts:23 ~ main ~ market:", market)
+  const priceFeed = await getContractPriceFeedTokenErc20(tokens[networkName].MyToken.priceFeed || "");
+
+  const latestRoundData = await priceFeed.latestRoundData();
+  console.log("🚀 ~ file: create-increase-order.ts:31 ~ main ~ latestRoundData:", latestRoundData)
 
 
-  const executionFee = ethers.parseEther("0.5");
-  const longTokenAmount = ethers.parseEther("0.021"); // 2.5 My Token
+
+  const executionFee = ethers.parseEther("0.001");
+  const longTokenAmount = ethers.parseUnits("1200", 18); // 2.5 My Token
   const shortTokenAmount = ethers.parseUnits("1000", 18); // 1 USDC
 
   const totalLongTokenAmount = longTokenAmount + executionFee;
@@ -36,6 +42,7 @@ async function main() {
   // Transfer WNT as execution fee
   // Transfer longToken as long amount
   const longToken = await getContractTokenErc20(market[2]); // MyToken
+  console.log("🚀 ~ file: create-increase-order.ts:45 ~ main ~ longToken:", longToken.target)
   const shortToken = await getContractTokenErc20(market[3]); // MyUSDC
   const wnt = await getWOKB9(networkName); // wrap okb
 
@@ -63,8 +70,8 @@ async function main() {
     },
     numbers: {
       sizeDeltaUsd: ethers.parseUnits("20", 30),
-      triggerPrice: ethers.parseUnits("1200", 6), // WETH oraclePrecision = 8
-      acceptablePrice: ethers.parseUnits("1500", 30),
+      triggerPrice: ethers.parseUnits("1", 6), // WETH oraclePrecision = 8
+      acceptablePrice: ethers.parseUnits("1", 30),
       executionFee,
       callbackGasLimit: 0,
       minOutputAmount: 0,
@@ -101,7 +108,7 @@ async function main() {
 
   const result = await exchangeRouter.multicall(multicallArgs, {
     value: executionFee,
-    gasLimit: 2_500_000,
+    // gasLimit: 2_500_000,
   });
   console.log("🚀 ~ file: deposit-liquidity.ts:91 ~ main ~ result:", result)
 }
