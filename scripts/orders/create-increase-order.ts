@@ -32,7 +32,7 @@ async function main() {
 
 
 
-  const executionFee = ethers.parseEther("0.1");
+  const executionFee = ethers.parseEther("0.5");
   const longTokenAmount = ethers.parseUnits("1.5", 18); // 2.5 My Token
   const shortTokenAmount = ethers.parseUnits("1000", 18); // 1 USDC
 
