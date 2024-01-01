@@ -69,9 +69,9 @@ async function main() {
       uiFeeReceiver:  ethers.ZeroAddress,
     },
     numbers: {
-      sizeDeltaUsd: ethers.parseUnits("20", 22),
-      triggerPrice: ethers.parseUnits("2300", 6), // WETH oraclePrecision = 6
-      acceptablePrice: ethers.parseUnits("2340", 22),
+      sizeDeltaUsd: ethers.parseUnits("20", 30),
+      triggerPrice: ethers.parseUnits("2355", 6), // WETH oraclePrecision = 6
+      acceptablePrice: ethers.parseUnits("2360", 30),
       executionFee,
       callbackGasLimit: 0,
       minOutputAmount: 0,

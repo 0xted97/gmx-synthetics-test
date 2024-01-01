@@ -24,10 +24,19 @@ async function main() {
   const orderHandler = await getContractOrderHandler(networkName);
   const market = await reader.getMarket(addresses[networkName].DataStore, marketOkbUsdc.marketToken);
 
+
+  const longToken = await getContractTokenErc20(market[2]); // MyToken
+  const shortToken = await getContractTokenErc20(market[3]); // MyUSDC
+  const wnt = await getWOKB9(networkName); // wrap okb
+  
   // Get deposit of account
   const orderKeys = await dataStore.getBytes32ValuesAt(keys.accountOrderListKey(wallet.address), 0, 10000);
 
 
+  const params = {
+
+  }
+  
   for await (const key of orderKeys) {
     const orderInfo = await reader.getOrder(dataStore.target, key);
     console.log("🚀 ~ file: print-order.ts:33 ~ forawait ~ orderInfo:", orderInfo)
