@@ -1,4 +1,5 @@
 import { ethers, network } from "hardhat";
+import { AbiCoder } from "ethers";
 import { getContractDataStore, getContractDepositVault, getContractExchangeRouter, getContractOrderHandler, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "../constants/contracts";
 import { addresses } from "../constants/addresses";
 import * as keys from "../utils/keys";
@@ -10,9 +11,10 @@ import { tokens } from "../constants/tokens";
  * Increase position of WNT + Stablecoin
  */
 async function main() {
+  const defaultAbiCoder = AbiCoder.defaultAbiCoder();
 
   const networkName = network.name;
-  const [wallet, , keeper] = await ethers.getSigners();
+  const [wallet, , keeper, signer] = await ethers.getSigners();
   const marketToken = MyTokenUSDCMarketToken;
 
   const exchangeRouter = await getContractExchangeRouter(networkName);
@@ -35,8 +37,29 @@ async function main() {
   // Get deposit of account
   // const totalOrderOfAccount = await dataStore.getBytes32Count(keys.accountOrderListKey(wallet.address));
 
-  const orderKeys = await dataStore.getBytes32ValuesAt(keys.accountOrderListKey(wallet.address), 0, 10000);
+  // Example data for values (signed reports by the DON)
+  const values = [
+    defaultAbiCoder.encode(['bytes32', 'string', 'bytes32[]', 'bytes32[]', 'bytes32'], [
+      '0x123',
+      'reportData1',
+      ['0x456'],
+      ['0x789'],
+      '0xabc',
+    ]),
+    defaultAbiCoder.encode(['bytes32', 'string', 'bytes32[]', 'bytes32[]', 'bytes32'], [
+      '0xdef',
+      'reportData2',
+      ['0xghi'],
+      ['0jkl'],
+      '0mno',
+    ]),
+  ];
+  console.log("🚀 ~ file: execute-order.ts:57 ~ main ~ values:", values)
 
+  
+  const oracleData = []
+
+  const orderKeys = await dataStore.getBytes32ValuesAt(keys.accountOrderListKey(wallet.address), 0, 10000);
 
   const params: OracleUtils.SetPricesParamsStruct = {
     signerInfo: 0,
@@ -54,12 +77,13 @@ async function main() {
     realtimeFeedTokens: [longToken.target, shortToken.target],
     realtimeFeedData: [ethers.ZeroHash],
   }
-  console.log("🚀 ~ file: execute-order.ts:54 ~ main ~ params:", params)
   const latestKey = orderKeys[orderKeys.length - 1];
   const orderInfo = await reader.getOrder(dataStore.target, latestKey);
-  console.log("🚀 ~ Order Market Token", orderInfo.addresses.market);
-  console.log("🚀 ~ Order Info type", orderInfo.numbers.orderType);
-  console.log("🚀 ~ Order Info acceptablePrice", orderInfo.numbers.acceptablePrice);
+
+
+  // console.log("🚀 ~ Order Market Token", orderInfo.addresses.market);
+  // console.log("🚀 ~ Order Info type", orderInfo.numbers.orderType);
+  // console.log("🚀 ~ Order Info acceptablePrice", orderInfo.numbers.acceptablePrice);
 
   const executeTx = await orderHandler.executeOrder(latestKey, params);
   console.log("🚀 ~ file: execute-order.ts:58 ~ forawait ~ executeTx:", executeTx)
