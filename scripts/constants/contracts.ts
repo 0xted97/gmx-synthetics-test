@@ -77,6 +77,12 @@ export const getContractOrderVault = async (network: string) => {
     return contract;
 }
 
+export const getContractOracleStore = async (network: string) => {
+    const contract = await ethers.getContractAt("OracleStore", addresses[network].OracleStore);
+    return contract;
+}
+
+
 export const getContractChain = async (network: string) => {
     const contract = await ethers.getContractAt("Chain", addresses[network].OrderHandler);
     return contract;

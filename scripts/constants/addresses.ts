@@ -29,6 +29,7 @@ export const addresses: { [chain: string]: Record<string, string> } = {
 
         // Oracle
         Oracle: "0xe5e2D3AbC89777f1DBf188E4A52Db847f56235cf",
+        OracleStore: "0x33D0D6a4f11fcb3D790766716B76e5A33C9C1b10",
         // X1 PriceFeed
         OracleService: "0x64481ebfFe69d688d754e09918e82C89D8Da2507",
         DataSource: "0x6cf2a39d1c85adfb50da183060dc0d46529f3f9c"

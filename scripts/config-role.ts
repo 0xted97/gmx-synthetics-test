@@ -1,13 +1,14 @@
 import { ethers, network } from "hardhat";
-import { getContractRoleStore } from "./constants/contracts";
+import { getContractOracleStore, getContractRoleStore } from "./constants/contracts";
 import * as roles from "./utils/roles";
 import { addresses } from "./constants/addresses";
 
 async function main() {
   const networkName = network.name;
-  const [wallet, , keeper] = await ethers.getSigners();
+  const [wallet, , keeper, signer] = await ethers.getSigners();
   // Get role controller
   const roleStore = await getContractRoleStore(networkName);
+  const oracleStore = await getContractOracleStore(networkName);
   const isWalletController = await roleStore.hasRole(wallet.address, roles.CONTROLLER);
   if (!isWalletController) {
     const grantTx = await roleStore.grantRole(wallet.address, roles.CONTROLLER);
@@ -47,6 +48,16 @@ async function main() {
     const grantTx = await roleStore.grantRole(keeper.address, roles.ORDER_KEEPER);
 
   }
+
+
+  const oracleSigners = await oracleStore.getSigners(0, 10);
+  const isSigner = oracleSigners.find((e)=> e.toLowerCase() == signer.address.toLowerCase());
+  console.log("🚀 ~ file: config-role.ts:55 ~ main ~ isSigner:", isSigner)
+  if(!isSigner) {
+    const addSignerTx = await oracleStore.addSigner(signer.address);
+    console.log("🚀 ~ file: config-role.ts:56 ~ main ~ addSignerTx:", addSignerTx.hash)
+  }
+
 
 
 }
