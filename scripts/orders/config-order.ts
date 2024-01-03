@@ -6,7 +6,7 @@ import { tokens } from "../constants/tokens";
 import { MyTokenUSDCMarketToken } from "../constants/markets";
 
 async function main() {
-  const [deployer, feeWallet] = await ethers.getSigners();
+  const [deployer, feeWallet, keeper] = await ethers.getSigners();
   const networkName = network.name;
 
   // Initial data

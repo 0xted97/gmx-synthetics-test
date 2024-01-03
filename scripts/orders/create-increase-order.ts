@@ -24,7 +24,6 @@ async function main() {
   const router = await getContractRouter(networkName);
   const orderHandler = await getContractOrderHandler(networkName);
   const market = await reader.getMarket(addresses[networkName].DataStore, marketOkbUsdc.marketToken);
-  console.log("🚀 ~ file: deposit-liquidity.ts:23 ~ main ~ market:", market)
   const priceFeed = await getContractPriceFeedTokenErc20(tokens[networkName].MyToken.priceFeed || "");
 
   const latestRoundData = await priceFeed.latestRoundData();
@@ -42,7 +41,6 @@ async function main() {
   // Transfer WNT as execution fee
   // Transfer longToken as long amount
   const longToken = await getContractTokenErc20(market[2]); // MyToken
-  console.log("🚀 ~ file: create-increase-order.ts:45 ~ main ~ longToken:", longToken.target)
   const shortToken = await getContractTokenErc20(market[3]); // MyUSDC
   const wnt = await getWOKB9(networkName); // wrap okb
 
@@ -70,8 +68,8 @@ async function main() {
     },
     numbers: {
       sizeDeltaUsd: ethers.parseUnits("20", 30),
-      triggerPrice: ethers.parseUnits("2355", 6), // WETH oraclePrecision = 6
-      acceptablePrice: ethers.parseUnits("2360", 30),
+      triggerPrice: ethers.parseUnits("2300", 6), // WETH oraclePrecision = 6
+      acceptablePrice: ethers.parseUnits("2500", 30),
       executionFee,
       callbackGasLimit: 0,
       minOutputAmount: 0,

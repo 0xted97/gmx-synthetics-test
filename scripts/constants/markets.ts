@@ -7,13 +7,13 @@ import { MarketToken__factory } from "../../typechain-types";
 
 
 export const DEFAULT_MARKET_TYPE = hashString("basic-v1");
-export const DefaultMarket = {
-    marketToken: "0xff405681d7B683429ddba7B59Eae670C4f3FBcca",
-    indexToken: "0x5E0d99a5d77Faeb5D54E5E620A5001526FFc45a0",
-    longToken: "0x5E0d99a5d77Faeb5D54E5E620A5001526FFc45a0",
-    shortToken: "0xa8F7C998Ca1A9528E8f296306ebf4FD40eE14f99",
-    type: DEFAULT_MARKET_TYPE,
-}
+// export const DefaultMarket = {
+//     marketToken: "0xff405681d7B683429ddba7B59Eae670C4f3FBcca",
+//     indexToken: "0x5E0d99a5d77Faeb5D54E5E620A5001526FFc45a0",
+//     longToken: "0x5E0d99a5d77Faeb5D54E5E620A5001526FFc45a0",
+//     shortToken: "0xa8F7C998Ca1A9528E8f296306ebf4FD40eE14f99",
+//     type: DEFAULT_MARKET_TYPE,
+// }
 
 export const MyTokenUSDCMarketToken = {
     marketToken: "0xff405681d7B683429ddba7B59Eae670C4f3FBcca",

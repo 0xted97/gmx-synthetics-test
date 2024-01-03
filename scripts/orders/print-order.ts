@@ -30,7 +30,9 @@ async function main() {
 
   for await (const key of orderKeys) {
     const orderInfo = await reader.getOrder(dataStore.target, key);
-    console.log("🚀 ~ file: print-order.ts:33 ~ forawait ~ orderInfo:", orderInfo)
+    console.log("🚀 ~ Order Market Token", key, orderInfo.addresses.market);
+    console.log("🚀 ~ Order Info type", key, orderInfo.numbers.orderType);
+    console.log("🚀 ~ Order Info acceptablePrice", key, orderInfo.numbers.acceptablePrice);
   }
 
 }
