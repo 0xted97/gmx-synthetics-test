@@ -1,5 +1,5 @@
 import { ethers, network } from "hardhat";
-import { getContractOracleStore, getContractRoleStore } from "./constants/contracts";
+import { getContractOracle, getContractOracleStore, getContractRoleStore } from "./constants/contracts";
 import * as roles from "./utils/roles";
 import { addresses } from "./constants/addresses";
 
@@ -8,6 +8,7 @@ async function main() {
   const [wallet, , keeper, signer] = await ethers.getSigners();
   // Get role controller
   const roleStore = await getContractRoleStore(networkName);
+  const oracle = await getContractOracle(networkName);
   const oracleStore = await getContractOracleStore(networkName);
   const isWalletController = await roleStore.hasRole(wallet.address, roles.CONTROLLER);
   if (!isWalletController) {
@@ -51,13 +52,16 @@ async function main() {
 
 
   const oracleSigners = await oracleStore.getSigners(0, 10);
-  const isSigner = oracleSigners.find((e)=> e.toLowerCase() == signer.address.toLowerCase());
+  const isSigner = oracleSigners.find((e) => e.toLowerCase() == signer.address.toLowerCase());
   console.log("🚀 ~ file: config-role.ts:55 ~ main ~ isSigner:", isSigner)
-  if(!isSigner) {
+  if (!isSigner) {
     const addSignerTx = await oracleStore.addSigner(signer.address);
     console.log("🚀 ~ file: config-role.ts:56 ~ main ~ addSignerTx:", addSignerTx.hash)
   }
 
+  // Get realtime-feed-verifier
+  const realtimeFeedVerifier = await oracle.realtimeFeedVerifier();
+  console.log("🚀 ~ file: config-role.ts:64 ~ main ~ realtimeFeedVerifier:", realtimeFeedVerifier)
 
 
 }

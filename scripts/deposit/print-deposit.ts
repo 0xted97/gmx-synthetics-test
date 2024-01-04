@@ -25,11 +25,19 @@ async function main() {
   const depositKeys = await dataStore.getBytes32ValuesAt(keys.accountDepositListKey(wallet.address), 0, 10000);
 
 
+  const depositsData = [];
   for await (const key of depositKeys) {
     const depositInfo = await reader.getDeposit(dataStore.target, key);
-    console.log("🚀 ~ file: print-deposit.ts:31 ~ forawait ~ depositInfo:", depositInfo)
+    depositsData.push({
+      market: depositInfo.addresses.market,
+      initialLongToken: depositInfo.addresses.initialLongToken,
+      initialShortToken: depositInfo.addresses.initialShortToken,
+      initialLongTokenAmount: depositInfo.numbers.initialLongTokenAmount,
+      initialShortTokenAmount: depositInfo.numbers.initialShortTokenAmount,
+    });
   }
-
+  console.log("Deposit records")
+  console.table(depositsData);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

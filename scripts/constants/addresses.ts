@@ -3,15 +3,15 @@ export const addresses: { [chain: string]: Record<string, string> } = {
         DataStore: "0x43B6C36c60Be31719323B78E71ECe2eD526862F9",
         RoleStore: "0x13370bf1d1309292343ebdfe668c7165A9BB1D7A",
         MarketFactory: "0xfE50ABB5383402089B7de87eb361D60f90D43cdB",
-        ExchangeRouter: "0x2A9042E67f45e1c81b00C08d990d6Dfaf8F1aDfd",
+        ExchangeRouter: "0x44eAb762a4036c652705b13359D8FC6EAaf57DAD",
         Router: "0xbF5DF7b2096AA7B2aDF0961D10ee9A943A42a125",
         
         // Handler
-        OrderHandler: "0xf19A2864C687604bab815b90713BE221909D7e0d",
-        DepositHandler: "0x169abFB7054363b4a2a67612beAFbc80b05B38C9",
-        WithdrawalHandler:"0xEAE24303012081fB20C20f13eAD8DdbeeDc01136",
-        AdlHandler: "0x3675483B3aeB1aD766375dAE3888131CcE057b57",
-        LiquidationHandler: "0xb9c4DAc15f28288aA0B661bFE83EA6e0C9e39594",
+        OrderHandler: "0xCC7DbE3d2C2710AdADA7CD10eADFfaA325b00B9A",
+        DepositHandler: "0xb4CF5607942516cc5afFD23194F2D68FcDB3E948",
+        WithdrawalHandler:"0xe3DF88fd4560bd330FF60cdb5Cd6A88E96020485",
+        AdlHandler: "0x9449cF4d1352D69d8860d525f17ee2673dECa90A",
+        LiquidationHandler: "0x9eDBAca757328dee3746159016238a5dC2a5eE7B",
         
         // Utils
         MarketStoreUtils: "0xD9e9961d6Ae6C0CC712FAf61baB2caaF1f4834A9",
@@ -28,7 +28,7 @@ export const addresses: { [chain: string]: Record<string, string> } = {
         Reader: "0x76fe0055e2F245EB7F15F3C47eF690b85cd1087c",
 
         // Oracle
-        Oracle: "0xe5e2D3AbC89777f1DBf188E4A52Db847f56235cf",
+        Oracle: "0x95B542E9FF4B14236c125b5D16dEA5faaB05b2d4",
         OracleStore: "0x33D0D6a4f11fcb3D790766716B76e5A33C9C1b10",
         // X1 PriceFeed
         OracleService: "0x64481ebfFe69d688d754e09918e82C89D8Da2507",

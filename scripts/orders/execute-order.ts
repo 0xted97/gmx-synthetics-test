@@ -38,23 +38,23 @@ async function main() {
   // const totalOrderOfAccount = await dataStore.getBytes32Count(keys.accountOrderListKey(wallet.address));
 
   // Example data for values (signed reports by the DON)
-  const values = [
-    defaultAbiCoder.encode(['bytes32', 'string', 'bytes32[]', 'bytes32[]', 'bytes32'], [
-      '0x123',
-      'reportData1',
-      ['0x456'],
-      ['0x789'],
-      '0xabc',
-    ]),
-    defaultAbiCoder.encode(['bytes32', 'string', 'bytes32[]', 'bytes32[]', 'bytes32'], [
-      '0xdef',
-      'reportData2',
-      ['0xghi'],
-      ['0jkl'],
-      '0mno',
-    ]),
-  ];
-  console.log("🚀 ~ file: execute-order.ts:57 ~ main ~ values:", values)
+  // const values = [
+  //   defaultAbiCoder.encode(['bytes32', 'string', 'bytes32[]', 'bytes32[]', 'bytes32'], [
+  //     '0x123',
+  //     'reportData1',
+  //     ['0x456'],
+  //     ['0x789'],
+  //     '0xabc',
+  //   ]),
+  //   defaultAbiCoder.encode(['bytes32', 'string', 'bytes32[]', 'bytes32[]', 'bytes32'], [
+  //     '0xdef',
+  //     'reportData2',
+  //     ['0xghi'],
+  //     ['0jkl'],
+  //     '0mno',
+  //   ]),
+  // ];
+  // console.log("🚀 ~ file: execute-order.ts:57 ~ main ~ values:", values)
 
   
   const oracleData = []

@@ -27,13 +27,17 @@ async function main() {
   // Get deposit of account
   const orderKeys = await dataStore.getBytes32ValuesAt(keys.accountOrderListKey(wallet.address), 0, 10000);
 
-
+  const ordersData = [];
   for await (const key of orderKeys) {
     const orderInfo = await reader.getOrder(dataStore.target, key);
-    console.log("🚀 ~ Order Market Token", key, orderInfo.addresses.market);
-    console.log("🚀 ~ Order Info type", key, orderInfo.numbers.orderType);
-    console.log("🚀 ~ Order Info acceptablePrice", key, orderInfo.numbers.acceptablePrice);
+    ordersData.push({
+      market: orderInfo.addresses.market,
+      orderType: orderInfo.numbers.orderType,
+      triggerPrice: orderInfo.numbers.triggerPrice,
+      acceptablePrice: orderInfo.numbers.acceptablePrice,
+    });
   }
+  console.table(ordersData);
 
 }
 
