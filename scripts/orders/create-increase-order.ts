@@ -31,9 +31,10 @@ async function main() {
 
 
 
-  const executionFee = ethers.parseEther("0.5");
-  const longTokenAmount = ethers.parseUnits("1997", 18); // 2.5 My Token
-  const shortTokenAmount = ethers.parseUnits("1000", 18); // 1 USDC
+  const executionFee = ethers.parseEther("1.1");
+  const longTokenAmount = ethers.parseUnits("2031", 18); // 2.5 My Token
+  const shortTokenAmount = ethers.parseUnits("1010", 18); // 1 USDC
+  const initialCollateralDeltaAmount = ethers.parseUnits("100", 18); // 1 USDC
 
   const totalLongTokenAmount = longTokenAmount + executionFee;
 
@@ -42,6 +43,7 @@ async function main() {
   // Transfer longToken as long amount
   const longToken = await getContractTokenErc20(market[2]); // MyToken
   const shortToken = await getContractTokenErc20(market[3]); // MyUSDC
+  const collateralToken = await getContractTokenErc20(market[3]); // MyUSDC
   const wnt = await getWOKB9(networkName); // wrap okb
 
   // await wnt.deposit({ value: ethers.parseEther("1") });
@@ -62,18 +64,19 @@ async function main() {
       receiver: wallet.address,
       callbackContract: ethers.ZeroAddress,
       market: marketOkbUsdc.marketToken,
-      initialCollateralToken: longToken.target.toString(),
+      initialCollateralToken: collateralToken.target.toString(),
       swapPath: [],
       uiFeeReceiver:  ethers.ZeroAddress,
     },
     numbers: {
-      sizeDeltaUsd: ethers.parseUnits("20", 30),
-      triggerPrice: ethers.parseUnits("2300", 6), // WETH oraclePrecision = 6
+      sizeDeltaUsd: ethers.parseUnits((100 * 10).toString(), 18), // I think leverage is x10
+      triggerPrice: 0, // WETH oraclePrecision = 6, // not needed for market order
+      // triggerPrice: ethers.parseUnits("2300", 6), // WETH oraclePrecision = 6, // not needed for market order
       acceptablePrice: ethers.parseUnits("2500", 6),
       executionFee,
       callbackGasLimit: 0,
       minOutputAmount: 0,
-      initialCollateralDeltaAmount: 0,
+      initialCollateralDeltaAmount, // by USD
     },
     orderType: 2, // MarketIncrease
     isLong: true, // not relevant for market swap
@@ -83,7 +86,6 @@ async function main() {
   };
 
   // Get referral address
-  const referral = await orderHandler.referralStorage();
 
   // Get nonce
   const nonce = await dataStore.getUint(keys.NONCE);
@@ -93,19 +95,19 @@ async function main() {
 
   const multicallArgs = [
     exchangeRouter.interface.encodeFunctionData("sendWnt", [addresses[networkName].OrderVault, executionFee]),
-    exchangeRouter.interface.encodeFunctionData("sendTokens", [longToken.target, addresses[networkName].OrderVault, longTokenAmount]), // Collateral
+    exchangeRouter.interface.encodeFunctionData("sendTokens", [collateralToken.target, addresses[networkName].OrderVault, initialCollateralDeltaAmount]), // Collateral
     exchangeRouter.interface.encodeFunctionData("createOrder", [params]),
   ];
 
   const testCall = await exchangeRouter.multicall.staticCall(multicallArgs, {
     value: executionFee,
-    gasLimit: 5_500_000,
+    gasLimit: 10_500_000,
   });
   console.log("🚀 ~ file: deposit-liquidity.ts:86 ~ main ~ testCall:", testCall)
 
   const result = await exchangeRouter.multicall(multicallArgs, {
     value: executionFee,
-    gasLimit: 5_500_000,
+    // gasLimit: 5_500_000,
   });
   console.log("🚀 ~ file: deposit-liquidity.ts:91 ~ main ~ result:", result)
 }

@@ -1,6 +1,6 @@
 import { ethers, network } from "hardhat";
 import { AbiCoder } from "ethers";
-import { getContractDataStore, getContractDepositVault, getContractExchangeRouter, getContractOrderHandler, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "../constants/contracts";
+import { getContractDataStore, getContractDepositVault, getContractExchangeRouter, getContractOrderHandler, getContractPriceFeedTokenErc20, getContractReader, getContractRouter, getContractTokenErc20, getWOKB9 } from "../constants/contracts";
 import { addresses } from "../constants/addresses";
 import * as keys from "../utils/keys";
 import { OracleUtils } from "../../typechain-types/contracts/exchange/OrderHandler";
@@ -33,6 +33,12 @@ async function main() {
   
   const longTokenPriceFeed = tokens[networkName].MyToken.priceFeed;
   const shortTokenPriceFeed = tokens[networkName].USDC.priceFeed;
+
+  const priceFeed = await getContractPriceFeedTokenErc20(longTokenPriceFeed|| "");
+
+  const latestRoundData = await priceFeed.latestRoundData();
+  console.log("🚀 ~ file: execute-order.ts:40 ~ main ~ latestRoundData:", latestRoundData)
+
 
   // Get deposit of account
   // const totalOrderOfAccount = await dataStore.getBytes32Count(keys.accountOrderListKey(wallet.address));
@@ -85,8 +91,20 @@ async function main() {
   // console.log("🚀 ~ Order Info type", orderInfo.numbers.orderType);
   // console.log("🚀 ~ Order Info acceptablePrice", orderInfo.numbers.acceptablePrice);
 
-  const executeTx = await orderHandler.executeOrder(latestKey, params);
-  console.log("🚀 ~ file: execute-order.ts:58 ~ forawait ~ executeTx:", executeTx)
+  // const executeTx = await orderHandler.executeOrder(latestKey, params);
+  // console.log("🚀 ~ file: execute-order.ts:58 ~ forawait ~ executeTx:", executeTx)
+
+  const simulateParams: OracleUtils.SimulatePricesParamsStruct = {
+    primaryPrices: [
+      {
+        min: ethers.parseUnits("2300", 6),
+        max: ethers.parseUnits("2500", 6)
+      }
+    ],
+    primaryTokens: [longToken.target],
+  }
+  const simulate = await orderHandler.simulateExecuteOrder(latestKey, simulateParams);
+  console.log("🚀 ~ file: execute-order.ts:96 ~ main ~ simulate:", simulate)
   
 
 
